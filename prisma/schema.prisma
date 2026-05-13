@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Url {
+  id          BigInt    @id @default(autoincrement()) // the auto-increment ID as the input to Base62 encoding. Each new URL gets a unique integer, we Base62-encode it, that's the short code. 
+  shortCode   String    @unique @db.VarChar(10) // Base62 of a 64-bit int fits in 11 chars. VarChar(10) covers up to ~839 billion URLs. The @unique constraint gives us a B-tree index automatically, which is what redirect lookups will hit.
+  longUrl     String    @db.Text // Text has no length limit and Postgres treats short and long text identically in storage.
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime? 
+
+  @@index([shortCode])
+  @@map("urls")
+}

@@ -26,3 +26,9 @@ Node.js, Express, PostgreSQL, Redis, GraphQL, JWT, AWS (EC2/RDS), Docker, Prisma
 - JWT-authenticated user accounts with API key management
 - Analytics dashboard endpoint: clicks over time, geographic breakdown (via IP geolocation), referrer tracking
 - Link expiration with TTL-based cleanup (pg_cron or scheduled worker)
+
+## Steps taken and why?
+
+- Prisma over Sequelize - type safety, declarative schema, and migrations that are diffable in PRs.
+- TypeScript over plain JS
+- Docker for Postgres locally - starting with. a containerized DB, so that environment matches production from the Day 1. Also, easy to start fresh.
