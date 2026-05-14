@@ -6,30 +6,32 @@ import { expressMiddleware } from "@as-integrations/express5";
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import { prisma, verifySequences } from "./db/prisma";
+import redirectRouter from "./routes/redirect";
 
 async function bootstrap() {
   const app = express();
   const port = Number(process.env.PORT ?? 4000);
 
-  // Apollo Server v4 setup. The plugin pattern allows us to inject
-  // request context (auth, etc.) per-request on Day 2.
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
-    // Disabling introspection in prod is a common hardening step.
-    // For dev/portfolio, we want it on so reviewers can explore the schema.
     introspection: true,
   });
-
   await apollo.start();
+
+  // Order matters. Express matches in registration order.
+  // 1. Specific paths first (/graphql, /health)
+  // 2. Wildcard catch-all (/:code) LAST
+  // If the order flipped, /:code matches "graphql" and "health" as short codes.
 
   app.use("/graphql", cors(), express.json(), expressMiddleware(apollo));
 
-  // Health check. Production-grade APIs always have one. Used by
-  // load balancers, Kubernetes, and uptime monitors.
   app.get("/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
+
+  // Redirect router mounted at root — must come AFTER specific routes.
+  app.use("/", redirectRouter);
 
   await verifySequences();
 
@@ -37,9 +39,6 @@ async function bootstrap() {
     console.log(`LinkForge API ready at http://localhost:${port}/graphql`);
   });
 
-  // Graceful shutdown. SIGTERM is what Docker/Kubernetes send when
-  // stopping a container. Closing the HTTP server + Prisma client
-  // ensures in-flight requests complete and DB connections are released.
   const shutdown = async (signal: string) => {
     console.log(`Received ${signal}, shutting down gracefully`);
     server.close();
