@@ -27,3 +27,23 @@ export const prisma =
 if (process.env.NODE_ENV !== "production") {
   global.__prisma = prisma;
 }
+
+/**
+ * Verify expected Postgres sequences exist at startup.
+ * The createShortUrl mutation depends on `urls_id_seq` existing.
+ * If the schema is renamed, this will fail fast on boot instead of
+ * silently breaking the mutation path at request time.
+ */
+export async function verifySequences(): Promise<void> {
+  const result = await prisma.$queryRaw<Array<{ exists: boolean }>>`
+    SELECT EXISTS (
+      SELECT 1 FROM pg_class WHERE relkind = 'S' AND relname = 'urls_id_seq'
+    ) AS exists
+  `;
+  if (!result[0]?.exists) {
+    throw new Error(
+      "Required sequence 'urls_id_seq' does not exist. " +
+        "Check that Prisma migrations have run and the schema is in sync.",
+    );
+  }
+}

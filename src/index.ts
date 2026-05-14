@@ -6,7 +6,7 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
-import { prisma } from "./db/prisma";
+import { prisma, verifySequences } from "./db/prisma";
 
 async function bootstrap() {
   const app = express();
@@ -31,6 +31,8 @@ async function bootstrap() {
   app.get("/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
+
+  await verifySequences();
 
   const server = app.listen(port, () => {
     console.log(`LinkForge API ready at http://localhost:${port}/graphql`);
