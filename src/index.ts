@@ -1,7 +1,6 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
 import { typeDefs } from "./graphql/schema";
@@ -24,7 +23,7 @@ async function bootstrap() {
 
   await apollo.start();
 
-  app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(apollo));
+  app.use("/graphql", cors(), express.json(), expressMiddleware(apollo));
 
   // Health check. Production-grade APIs always have one. Used by
   // load balancers, Kubernetes, and uptime monitors.

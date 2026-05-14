@@ -15,7 +15,14 @@
     "url": "git+https://github.com/meetbhavsar99/LinkForge.git"
   },
   "author": "Meet Bhavsar",
-  "keywords": ["url-shortener", "graphql", "redis", "typescript", "postgres", "system-design"],
+  "keywords": [
+    "url-shortener",
+    "graphql",
+    "redis",
+    "typescript",
+    "postgres",
+    "system-design"
+  ],
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
@@ -26,7 +33,6 @@
     "@apollo/server": "^5.5.1",
     "@as-integrations/express5": "^1.1.2",
     "@prisma/client": "^6.19.3",
-    "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

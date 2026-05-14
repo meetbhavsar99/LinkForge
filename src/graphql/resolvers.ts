@@ -74,8 +74,8 @@ export const resolvers = {
       // $queryRaw returns an array of rows. The result of nextval() comes
       // back as a BigInt because the underlying column is BIGINT.
       const result = await prisma.$queryRaw<Array<{ nextval: bigint }>>`
-    SELECT nextval('urls_id_seq') AS nextval
-  `;
+        SELECT nextval('urls_id_seq') AS nextval
+      `;
       const nextId = result[0].nextval;
       const shortCode = encodeBase62(nextId);
 
