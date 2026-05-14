@@ -8,12 +8,20 @@ datasource db {
 }
 
 model Url {
-  id          BigInt    @id @default(autoincrement()) // the auto-increment ID as the input to Base62 encoding. Each new URL gets a unique integer, we Base62-encode it, that's the short code. 
-  shortCode   String    @unique @db.VarChar(10) // Base62 of a 64-bit int fits in 11 chars. VarChar(10) covers up to ~839 billion URLs. The @unique constraint gives us a B-tree index automatically, which is what redirect lookups will hit.
-  longUrl     String    @db.Text // Text has no length limit and Postgres treats short and long text identically in storage.
+  id          BigInt    @id @default(autoincrement())
+  shortCode   String    @unique @db.VarChar(10)
+  longUrl     String    @db.Text
   createdAt   DateTime  @default(now())
-  expiresAt   DateTime? 
+  expiresAt   DateTime?
 
   @@index([shortCode])
   @@map("urls")
 }
+
+/**
+* id BigInt autoincrement - using the auto-increment ID as the input to Base62 encoding. 
+* Each new URL gets a unique integer, we Base62-encode it, that's the short code.
+* BigInt instead of Int - at scale, a URL shortener can hit billions of records.
+* shortCode String @unique @db.VarChar(10) - Base62 of a 64-bit int fits in 11 chars.
+* longUrl String @db.Text - URLs can be very long (think tracking params on marketing URLs). Text has no length * limit and Postgres treats short and long text identically in storage.
+*/
