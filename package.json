@@ -1,10 +1,10 @@
 {
   "name": "linkforge",
   "version": "1.0.0",
-  "description": "An URL shortener to mainly create branded short links. It tracks which links get clicked. It tries to solve real distributed concerns, such as, consistent hashing for short-code generation, Redis caching on the read path, click-stream analytics via async processing, and rate limiting.",
+  "description": "A distributed URL shortener with GraphQL API, Redis read-through caching, async click-stream analytics, and token-bucket rate limiting.",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "prisma:generate": "prisma generate",
@@ -14,8 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/meetbhavsar99/LinkForge.git"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Meet Bhavsar",
+  "keywords": ["url-shortener", "graphql", "redis", "typescript", "postgres", "system-design"],
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.8.0",
+    "@types/node": "^20",
     "prisma": "^6.19.3",
     "ts-node-dev": "^2.0.0",
     "typescript": "^6.0.3"
