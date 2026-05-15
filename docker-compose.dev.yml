@@ -11,6 +11,23 @@ services:
       - "5432:5432"
     volumes:
       - linkforge_pg_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    container_name: linkforge-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    # AOF persistence: writes are appended to a log file.
+    # Overkill for a cache, but cheap insurance during dev.
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
 
 volumes:
   linkforge_pg_data:
+  redis_data:

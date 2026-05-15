@@ -7,6 +7,7 @@ import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import { prisma, verifySequences } from "./db/prisma";
 import redirectRouter from "./routes/redirect";
+import "./db/redis";
 
 async function bootstrap() {
   const app = express();

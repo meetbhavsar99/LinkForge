@@ -40,3 +40,4 @@ The counter-based approach requires the ID before we can compute the short code,
 - Prisma over Sequelize - type safety, declarative schema, and migrations that are diffable in PRs.
 - TypeScript over plain JS
 - Docker for Postgres locally - starting with. a containerized DB, so that environment matches production from the Day 1. Also, easy to start fresh.
+- ioredis over redis: ioredis has better TypeScript support, built-in cluster support if you ever need it, and a more ergonomic Promise-based API.

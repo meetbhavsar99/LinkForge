@@ -36,11 +36,13 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "graphql": "^16.14.0"
+    "graphql": "^16.14.0",
+    "ioredis": "^5.10.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/ioredis": "^4.28.10",
     "@types/node": "^20",
     "prisma": "^6.19.3",
     "ts-node-dev": "^2.0.0",
